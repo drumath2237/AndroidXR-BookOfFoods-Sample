@@ -16,6 +16,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,8 +39,13 @@ import androidx.xr.compose.subspace.layout.height
 import androidx.xr.compose.subspace.layout.movable
 import androidx.xr.compose.subspace.layout.resizable
 import androidx.xr.compose.subspace.layout.width
+import androidx.xr.runtime.math.Pose
+import androidx.xr.runtime.math.Vector3
+import androidx.xr.scenecore.GltfModel
+import androidx.xr.scenecore.GltfModelEntity
 import androidx.xr.scenecore.scene
 import dev.drumath2237.bookoffoodsxr.ui.theme.AndroidXRBookOfFoodsTheme
+import kotlinx.coroutines.guava.await
 
 class MainActivity : ComponentActivity() {
 
@@ -70,6 +76,24 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("RestrictedApi")
 @Composable
 fun MySpatialContent(onRequestHomeSpaceMode: () -> Unit) {
+    val xrSession = LocalSession.current
+
+    Subspace {
+        xrSession?.let {
+            LaunchedEffect(key1 = Unit) {
+                val model = GltfModel.create(session = it, name = "apple.glb").await()
+                val entity = GltfModelEntity.create(
+                    session = xrSession,
+                    model = model,
+                    pose = Pose(translation = Vector3(0f, -0.2f, 0.15f))
+                )
+                print(entity.getPose())
+            }
+
+        }
+    }
+
+
     SpatialPanel(SubspaceModifier.width(1280.dp).height(800.dp).resizable().movable()) {
         Surface {
             Box(
