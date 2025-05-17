@@ -38,6 +38,7 @@ import androidx.xr.compose.subspace.layout.height
 import androidx.xr.compose.subspace.layout.movable
 import androidx.xr.compose.subspace.layout.resizable
 import androidx.xr.compose.subspace.layout.width
+import androidx.xr.scenecore.scene
 import dev.drumath2237.bookoffoodsxr.ui.theme.AndroidXRBookOfFoodsTheme
 
 class MainActivity : ComponentActivity() {
@@ -52,10 +53,14 @@ class MainActivity : ComponentActivity() {
                 val session = LocalSession.current
                 if (LocalSpatialCapabilities.current.isSpatialUiEnabled) {
                     Subspace {
-                        MySpatialContent(onRequestHomeSpaceMode = { session?.requestHomeSpaceMode() })
+                        MySpatialContent(onRequestHomeSpaceMode = {
+                            session?.scene?.spatialEnvironment?.requestHomeSpaceMode()
+                        })
                     }
                 } else {
-                    My2DContent(onRequestFullSpaceMode = { session?.requestFullSpaceMode() })
+                    My2DContent(onRequestFullSpaceMode = {
+                        session?.scene?.spatialEnvironment?.requestFullSpaceMode()
+                    })
                 }
             }
         }
