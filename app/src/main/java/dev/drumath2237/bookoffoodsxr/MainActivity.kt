@@ -93,7 +93,8 @@ fun My2DContent(onRequestFullSpaceMode: () -> Unit) {
     Surface {
         Row(
             modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             MainContent(modifier = Modifier.padding(48.dp))
             if (LocalHasXrSpatialFeature.current) {
@@ -131,9 +132,9 @@ fun HomeSpaceModeIconButton(onClick: () -> Unit, modifier: Modifier = Modifier) 
     }
 }
 
-@PreviewLightDark
+@Preview(widthDp = 1024, heightDp = 720)
 @Composable
-fun My2dContentPreview() {
+fun HomeSpacePreview() {
     AndroidXRBookOfFoodsTheme {
         My2DContent(onRequestFullSpaceMode = {})
     }
