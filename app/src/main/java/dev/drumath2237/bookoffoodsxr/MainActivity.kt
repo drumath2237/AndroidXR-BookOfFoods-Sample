@@ -5,9 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -75,15 +73,10 @@ fun MySpatialContent(onRequestHomeSpaceMode: () -> Unit) {
     SpatialPanel(SubspaceModifier.width(1280.dp).height(800.dp).resizable().movable()) {
         Surface {
             Box(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    MainContent(modifier = Modifier.padding(48.dp))
-                }
+                MainContent(modifier = Modifier.padding(48.dp))
             }
         }
 
@@ -106,7 +99,8 @@ fun MySpatialContent(onRequestHomeSpaceMode: () -> Unit) {
 fun My2DContent(onRequestFullSpaceMode: () -> Unit) {
     Surface {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
             if (LocalHasXrSpatialFeature.current) {
                 FullSpaceModeIconButton(
@@ -117,13 +111,7 @@ fun My2DContent(onRequestFullSpaceMode: () -> Unit) {
                 )
             }
 
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                MainContent(modifier = Modifier.padding(48.dp))
-            }
+            MainContent(modifier = Modifier.padding(48.dp))
         }
     }
 }
