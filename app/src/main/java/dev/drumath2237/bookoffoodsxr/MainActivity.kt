@@ -74,12 +74,19 @@ class MainActivity : ComponentActivity() {
 fun MySpatialContent(onRequestHomeSpaceMode: () -> Unit) {
     SpatialPanel(SubspaceModifier.width(1280.dp).height(800.dp).resizable().movable()) {
         Surface {
-            MainContent(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(48.dp)
-            )
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    MainContent(modifier = Modifier.padding(48.dp))
+                }
+            }
         }
+
         Orbiter(
             position = OrbiterEdge.Top,
             offset = EdgeOffset.inner(offset = 20.dp),
