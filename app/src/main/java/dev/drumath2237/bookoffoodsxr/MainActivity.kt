@@ -43,6 +43,8 @@ import androidx.xr.runtime.math.Pose
 import androidx.xr.runtime.math.Vector3
 import androidx.xr.scenecore.GltfModel
 import androidx.xr.scenecore.GltfModelEntity
+import androidx.xr.scenecore.MovableComponent
+import androidx.xr.scenecore.ResizableComponent
 import androidx.xr.scenecore.scene
 import dev.drumath2237.bookoffoodsxr.ui.theme.AndroidXRBookOfFoodsTheme
 import kotlinx.coroutines.guava.await
@@ -83,16 +85,16 @@ fun MySpatialContent(onRequestHomeSpaceMode: () -> Unit) {
             LaunchedEffect(key1 = Unit) {
                 val model = GltfModel.create(session = it, name = "apple.glb").await()
                 val entity = GltfModelEntity.create(
-                    session = xrSession,
+                    session = it,
                     model = model,
                     pose = Pose(translation = Vector3(0f, -0.2f, 0.15f))
                 )
-                print(entity.getPose())
-            }
 
+                entity.addComponent(MovableComponent.create(it))
+                entity.addComponent(ResizableComponent.create(it))
+            }
         }
     }
-
 
     SpatialPanel(SubspaceModifier.width(1280.dp).height(800.dp).resizable().movable()) {
         Surface {
