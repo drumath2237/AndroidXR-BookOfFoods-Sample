@@ -27,7 +27,6 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.xr.compose.platform.LocalHasXrSpatialFeature
 import androidx.xr.compose.platform.LocalSession
-import androidx.xr.compose.platform.LocalSpatialCapabilities
 import androidx.xr.compose.spatial.EdgeOffset
 import androidx.xr.compose.spatial.Orbiter
 import androidx.xr.compose.spatial.OrbiterEdge
@@ -45,7 +44,7 @@ import androidx.xr.scenecore.GltfModel
 import androidx.xr.scenecore.GltfModelEntity
 import androidx.xr.scenecore.MovableComponent
 import androidx.xr.scenecore.ResizableComponent
-import androidx.xr.scenecore.scene
+import dev.drumath2237.bookoffoodsxr.ui.components.BookOfFoods
 import dev.drumath2237.bookoffoodsxr.ui.theme.AndroidXRBookOfFoodsTheme
 import kotlinx.coroutines.guava.await
 
@@ -58,18 +57,19 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AndroidXRBookOfFoodsTheme {
-                val session = LocalSession.current
-                if (LocalSpatialCapabilities.current.isSpatialUiEnabled) {
-                    Subspace {
-                        MySpatialContent(onRequestHomeSpaceMode = {
-                            session?.scene?.spatialEnvironment?.requestHomeSpaceMode()
-                        })
-                    }
-                } else {
-                    My2DContent(onRequestFullSpaceMode = {
-                        session?.scene?.spatialEnvironment?.requestFullSpaceMode()
-                    })
-                }
+                BookOfFoods()
+//                val session = LocalSession.current
+//                if (LocalSpatialCapabilities.current.isSpatialUiEnabled) {
+//                    Subspace {
+//                        MySpatialContent(onRequestHomeSpaceMode = {
+//                            session?.scene?.spatialEnvironment?.requestHomeSpaceMode()
+//                        })
+//                    }
+//                } else {
+//                    My2DContent(onRequestFullSpaceMode = {
+//                        session?.scene?.spatialEnvironment?.requestFullSpaceMode()
+//                    })
+//                }
             }
         }
     }
