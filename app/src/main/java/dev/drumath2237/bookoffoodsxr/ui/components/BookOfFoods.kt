@@ -1,5 +1,7 @@
 package dev.drumath2237.bookoffoodsxr.ui.components
 
+import android.app.UiModeManager
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,10 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -28,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.UiMode
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -71,7 +76,7 @@ fun FoodScreen(
                         modifier = Modifier
                             .size(480.dp)
                             .clip(RoundedCornerShape(32.dp))
-                            .background(color = Color(217, 194, 163, 255))
+                            .background(color = Color(0xFFEADAC6))
                     )
 
                     IconButton(
@@ -95,35 +100,62 @@ fun FoodScreen(
                     }
                 }
 
-                Column {
-                    Text(
-                        text = food.name,
-                        fontSize = TextUnit(45f, TextUnitType.Sp),
-                        modifier = Modifier.padding(vertical = 16.dp)
-                    )
-
-                    Text(
-                        food.detail,
-                        fontSize = TextUnit(22f, TextUnitType.Sp),
-                        modifier = Modifier.padding(vertical = 16.dp)
-                    )
-
-                    Button(
-                        onClick = onNextButtonClicked,
-                        modifier = Modifier
-                            .padding(vertical = 16.dp)
-                            .width(120.dp)
-                            .height(56.dp)
-                    ) {
-                        Text("Next", fontSize = TextUnit(22f, TextUnitType.Sp))
-                    }
-                }
+                FoodDetailSidePanel(food = food, onNextButtonClicked = onNextButtonClicked)
             }
         }
     }
 }
 
-@Preview(widthDp = 1024, heightDp = 720)
+@Composable
+fun FoodDetailSidePanel(
+    food: FoodResource,
+    modifier: Modifier = Modifier,
+    onNextButtonClicked: () -> Unit,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = food.name,
+            fontSize = TextUnit(45f, TextUnitType.Sp),
+            modifier = Modifier.padding(vertical = 16.dp)
+        )
+
+        Text(
+            food.detail,
+            fontSize = TextUnit(22f, TextUnitType.Sp),
+            modifier = Modifier.padding(vertical = 16.dp)
+        )
+
+        Button(
+            onClick = onNextButtonClicked,
+            colors = ButtonColors(
+                containerColor = Color(0xFFB09257),
+                contentColor = Color.White,
+                disabledContainerColor = Color.Gray,
+                disabledContentColor = contentColorFor(Color.Gray)
+            ),
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .width(120.dp)
+                .height(56.dp)
+
+        ) {
+            Text("Next", fontSize = TextUnit(22f, TextUnitType.Sp))
+        }
+    }
+}
+
+@Preview(
+    widthDp = 1024,
+    heightDp = 720,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true
+)
+@Preview(
+    widthDp = 1024,
+    heightDp = 720,
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    showBackground = true
+)
 @Composable
 fun BookOfFoodsPreview() {
     AndroidXRBookOfFoodsTheme {
