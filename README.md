@@ -4,6 +4,8 @@
 
 ## About
 
+Video:
+
 https://github.com/user-attachments/assets/7e5b11d0-e367-49c3-94b0-a2d382136de9
 
 "Book of Foods" is a sample project using Jetpack XR XDK of Android XR.
