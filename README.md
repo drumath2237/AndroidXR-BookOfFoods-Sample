@@ -1,6 +1,10 @@
 # Android XR Sample "Book of Foods"
 
+[![Build](https://github.com/drumath2237/AndroidXR-BookOfFoods-Sample/actions/workflows/android.yml/badge.svg)](https://github.com/drumath2237/AndroidXR-BookOfFoods-Sample/actions/workflows/android.yml)
+
 ## About
+
+https://github.com/user-attachments/assets/7e5b11d0-e367-49c3-94b0-a2d382136de9
 
 "Book of Foods" is a sample project using Jetpack XR XDK of Android XR.
 This demo includes functions below.
