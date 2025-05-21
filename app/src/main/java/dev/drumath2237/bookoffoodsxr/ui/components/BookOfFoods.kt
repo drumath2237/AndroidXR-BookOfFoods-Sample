@@ -45,6 +45,7 @@ import androidx.xr.compose.subspace.SpatialPanel
 import androidx.xr.compose.subspace.layout.SubspaceModifier
 import androidx.xr.compose.subspace.layout.offset
 import androidx.xr.compose.subspace.layout.size
+import androidx.xr.runtime.Session
 import androidx.xr.runtime.math.Pose
 import androidx.xr.runtime.math.Vector3
 import androidx.xr.scenecore.GltfModel
@@ -69,9 +70,7 @@ fun BookOfFoods() {
             food = food,
             onNextButtonClicked = { foodIndex = (foodIndex + 1) % foodsResources.size },
         )
-
     }
-
 }
 
 @Composable
@@ -83,70 +82,58 @@ fun FoodScreen(
     val session = LocalSession.current
 
     Surface {
-        Box(
-            contentAlignment = Alignment.Center, modifier = modifier.fillMaxSize()
-        ) {
+        Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxSize()) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.padding(16.dp)
             ) {
-                Box(modifier = Modifier.padding(8.dp)) {
-                    Image(
-                        painter = painterResource(food.imageResourceId),
-                        contentDescription = food.name,
-                        modifier = Modifier
-                            .size(480.dp)
-                            .clip(RoundedCornerShape(32.dp))
-                            .background(color = Color(0xFFEADAC6))
-                    )
-
-                    IconButton(
-                        onClick = { session?.scene?.spatialEnvironment?.requestFullSpaceMode() },
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(8.dp)
-
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.outline_open_in_full_24),
-                            contentDescription = "open in full",
-                            tint = Color.White,
-                            modifier = Modifier
-                                .size(64.dp)
-                                .clip(RoundedCornerShape(32.dp))
-                                .background(color = Color(0xFFB09257))
-                                .padding(8.dp)
-
-                        )
-                    }
-                }
-
-                FoodDetailSidePanel(food = food) {
-                    Button(
-                        onClick = onNextButtonClicked,
-                        colors = ButtonColors(
-                            containerColor = Color(0xFFB09257),
-                            contentColor = Color.White,
-                            disabledContainerColor = Color.Gray,
-                            disabledContentColor = contentColorFor(Color.Gray)
-                        ), modifier = Modifier
-                            .padding(vertical = 16.dp)
-                            .width(120.dp)
-                            .height(56.dp)
-                    ) {
-                        Text("Next", fontSize = TextUnit(22f, TextUnitType.Sp))
-                    }
-                }
+                FoodImage(food = food, session = session)
+                FoodDetailSidePanel(food = food, onNextButtonClicked = onNextButtonClicked)
             }
         }
     }
 }
 
 @Composable
+fun FoodImage(food: FoodResource, session: Session?) {
+    Box(modifier = Modifier.padding(8.dp)) {
+        Image(
+            painter = painterResource(food.imageResourceId),
+            contentDescription = food.name,
+            modifier = Modifier
+                .size(480.dp)
+                .clip(RoundedCornerShape(32.dp))
+                .background(color = Color(0xFFEADAC6))
+        )
+
+        IconButton(
+            onClick = { session?.scene?.spatialEnvironment?.requestFullSpaceMode() },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(8.dp)
+
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.outline_open_in_full_24),
+                contentDescription = "open in full",
+                tint = Color.White,
+                modifier = Modifier
+                    .size(64.dp)
+                    .clip(RoundedCornerShape(32.dp))
+                    .background(color = Color(0xFFB09257))
+                    .padding(8.dp)
+
+            )
+        }
+    }
+
+}
+
+@Composable
 fun FoodDetailSidePanel(
     food: FoodResource,
+    onNextButtonClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    additionalComponent: @Composable () -> Unit = {}
 ) {
     Column(modifier = modifier) {
         Text(
@@ -161,7 +148,21 @@ fun FoodDetailSidePanel(
             modifier = Modifier.padding(vertical = 16.dp)
         )
 
-        additionalComponent()
+        Button(
+            onClick = onNextButtonClicked,
+            colors = ButtonColors(
+                containerColor = Color(0xFFB09257),
+                contentColor = Color.White,
+                disabledContainerColor = Color.Gray,
+                disabledContentColor = contentColorFor(Color.Gray)
+            ), modifier = Modifier
+                .padding(vertical = 16.dp)
+                .width(120.dp)
+                .height(56.dp)
+        ) {
+            Text("Next", fontSize = TextUnit(22f, TextUnitType.Sp))
+        }
+
     }
 }
 
@@ -171,7 +172,7 @@ fun SpatialFoodScreen(
 ) {
     Subspace {
         val xrSession = checkNotNull(LocalSession.current)
-        var gltfEntity = remember<GltfModelEntity?> { null }
+        var gltfModelEntity = remember<GltfModelEntity?> { null }
 
         SpatialPanel(
             modifier = SubspaceModifier
@@ -180,23 +181,21 @@ fun SpatialFoodScreen(
         ) {
             LaunchedEffect(key1 = Unit) {
                 val gltfModel = GltfModel.create(xrSession, name = food.glbModelPath).await()
-                gltfEntity = GltfModelEntity.create(
+                gltfModelEntity = GltfModelEntity.create(
                     session = xrSession,
                     model = gltfModel,
                     pose = Pose(translation = Vector3(0f, -0.15f, 0f))
                 )
-                gltfEntity.addComponent(MovableComponent.create(session = xrSession))
+                gltfModelEntity.addComponent(MovableComponent.create(session = xrSession))
             }
 
             DisposableEffect(Unit) {
                 onDispose {
-                    gltfEntity?.dispose()
+                    gltfModelEntity?.dispose()
                 }
             }
 
-            Orbiter(
-                position = OrbiterEdge.Bottom,
-            ) {
+            Orbiter(position = OrbiterEdge.Bottom) {
                 Button(onClick = { xrSession.scene.spatialEnvironment.requestHomeSpaceMode() }) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
